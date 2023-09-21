@@ -1,17 +1,30 @@
 use std::fs::File;
 use std::io::prelude::*;
+use std::time;
 
 fn main(){
     let mut file = File::open("files/puzzle_input.txt").unwrap();
     let mut input = String::new();
+    const ITERATIONS: i32 = 100;
+    let mut now = time::Instant::now();
     file.read_to_string(&mut input).unwrap();
     input.push('\n');
     
-    //println!("{}", get_surface_area_with_extra(input));
-    println!("{}", part_2("files/puzzle_input.txt"));
+    for i in 0..100 {
+        part_1(&input);
+    }
+    let elapsed = now.elapsed().as_nanos() as f64;
+    println!("Running function part_1() {} times\nTotal Time: {:?}ms\nAvg Time: {:?}", ITERATIONS, elapsed/1_000_000.0, (elapsed/ITERATIONS as f64)/1_000_000.0);
+    now = time::Instant::now();
+    
+    for i in 0..100 {
+        part_2("files/puzzle_input.txt");
+    }
+    let elapsed = now.elapsed().as_nanos() as f64;
+    println!("Running function part_2() {} times\nTotal Time: {:?}ms\nAvg Time: {:?}", ITERATIONS, elapsed/1_000_000.0, (elapsed/ITERATIONS as f64)/1_000_000.0);
 }
 
-fn get_surface_area_with_extra(input: String) -> i32 {
+fn part_1(input: &str) -> i32 {
     let mut length: i32 = -1;
     let mut width: i32 = -1;
     let mut height: i32 = -1;
@@ -20,7 +33,6 @@ fn get_surface_area_with_extra(input: String) -> i32 {
     
     let mut num = String::new();
     for (index, character) in input.chars().enumerate() {
-        print!("{}", character);
         if (character == 'x' || character == '\n') && num.len() > 0 {
             if length == -1 { length = num.parse::<i32>().unwrap(); }
             else if width == -1 { width = num.parse::<i32>().unwrap(); }
@@ -38,7 +50,6 @@ fn get_surface_area_with_extra(input: String) -> i32 {
             width = -1;
             height = -1;
         }
-        
     }
     area
 }
@@ -56,7 +67,6 @@ fn part_2(input_filepath: &str) -> i32 {
     for line in reader.lines() {
         let tmp = line.unwrap();
         let dimensions: Vec<&str> = tmp.split('x').collect();
-        //print!("[{},{},{}]\n", dimensions[0], dimensions[1], dimensions[2]);
         length = dimensions[0].parse().unwrap();
         width = dimensions[1].parse().unwrap();
         height = dimensions[2].parse().unwrap();
@@ -73,7 +83,3 @@ fn part_2(input_filepath: &str) -> i32 {
     }
     return ribbon_length_total;
 }
-
-//fn getSurfaceAreaWithExtra(width: i32, length: i32, height: i32) -> i32 {
-//    2*length*width + 2*width*height + 2*height*length + if length*width > width*height && length*width > height*length { 2*length*width } else if width*height > height*length { 2*width*height} else { 2*height*length }
-//}
