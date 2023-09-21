@@ -7,7 +7,8 @@ fn main(){
     file.read_to_string(&mut input).unwrap();
     input.push('\n');
     
-    println!("{}", get_surface_area_with_extra(input));
+    //println!("{}", get_surface_area_with_extra(input));
+    println!("{}", part_2("files/puzzle_input.txt"));
 }
 
 fn get_surface_area_with_extra(input: String) -> i32 {
@@ -40,6 +41,37 @@ fn get_surface_area_with_extra(input: String) -> i32 {
         
     }
     area
+}
+
+fn part_2(input_filepath: &str) -> i32 {
+    let mut length: i32 = -1;
+    let mut width: i32 = -1;
+    let mut height: i32 = -1;
+    let mut cubic_area = 0;
+    let mut ribbon_length_total = 0;
+    
+    let file = File::open(input_filepath).unwrap();
+    let reader = std::io::BufReader::new(file);
+    
+    for line in reader.lines() {
+        let tmp = line.unwrap();
+        let dimensions: Vec<&str> = tmp.split('x').collect();
+        //print!("[{},{},{}]\n", dimensions[0], dimensions[1], dimensions[2]);
+        length = dimensions[0].parse().unwrap();
+        width = dimensions[1].parse().unwrap();
+        height = dimensions[2].parse().unwrap();
+        
+        let mut smallest = std::cmp::min(length, width);
+        smallest = std::cmp::min(smallest, height);
+        
+        let mut biggest = std::cmp::max(length, width);
+        biggest = std::cmp::max(biggest, height);
+        
+        let second_smallest = length + width + height - smallest - biggest;
+        let ribbon_length = (smallest * 2 + second_smallest * 2)+length*width*height;
+        ribbon_length_total += ribbon_length;
+    }
+    return ribbon_length_total;
 }
 
 //fn getSurfaceAreaWithExtra(width: i32, length: i32, height: i32) -> i32 {
