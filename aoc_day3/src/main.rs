@@ -14,7 +14,7 @@ fn main() {
 }
 
 fn part1(input: &str) -> usize {
-    let mut houses_visited: Vec<(Pos, i32)> = Vec::new();
+    let mut houses_visited: Vec<Pos> = Vec::new();
     
     let mut current_pos: Pos = Default::default();
     
@@ -27,9 +27,8 @@ fn part1(input: &str) -> usize {
             _ => continue,
         }
         
-        match houses_visited.iter_mut().find(|(pos, _)| *pos == current_pos) {
-            Some((_, count)) => *count += 1, // if current position already exists
-            None => houses_visited.push((current_pos, 1)), // if the current position isn't in the vector already
+        if !houses_visited.contains(&current_pos) {
+            houses_visited.push(current_pos);
         }
     }
     houses_visited.len()
