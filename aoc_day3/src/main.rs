@@ -1,5 +1,5 @@
 use std::fs;
-
+use std::time;
 
 #[derive(Default, PartialEq, Copy, Clone)]
 struct Pos {
@@ -8,7 +8,21 @@ struct Pos {
 
 fn main() {
     let input = fs::read_to_string("input.txt").unwrap();
+    const ITERATIONS: i32 = 100;
+    let mut now = time::Instant::now();
     
+    for i in 0..100 {
+        part1(&input);
+    }
+    let elapsed = now.elapsed().as_nanos() as f64;
+    println!("Running function part_1() {} times\nTotal Time: {:?}ms\nAvg Time: {:?}", ITERATIONS, elapsed/1_000_000.0, (elapsed/ITERATIONS as f64)/1_000_000.0);
+    now = time::Instant::now();
+    
+    for i in 0..100 {
+        part2(&input);
+    }
+    let elapsed = now.elapsed().as_nanos() as f64;
+    println!("Running function part_2() {} times\nTotal Time: {:?}ms\nAvg Time: {:?}", ITERATIONS, elapsed/1_000_000.0, (elapsed/ITERATIONS as f64)/1_000_000.0);
     
     println!("Part1: {} houses received at least one present.", part1(&input));
     println!("Part2: {} houses received at least one present.", part2(&input));
